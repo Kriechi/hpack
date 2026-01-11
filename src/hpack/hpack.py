@@ -76,7 +76,7 @@ def encode_integer(integer: int, prefix_bits: int) -> bytearray:
     return bytearray(elements)
 
 
-def decode_integer(data: bytes, prefix_bits: int) -> tuple[int, int]:
+def decode_integer(data: bytes | memoryview, prefix_bits: int) -> tuple[int, int]:
     """
     Decodes an integer according to the wacky integer encoding rules
     defined in the HPACK spec. Returns a tuple of the decoded integer and the
@@ -548,7 +548,7 @@ class Decoder:
             msg = "Encoder did not shrink table size to within the max"
             raise InvalidTableSizeError(msg)
 
-    def _update_encoding_context(self, data: bytes) -> int:
+    def _update_encoding_context(self, data: bytes | memoryview) -> int:
         """
         Handles a byte that updates the encoding context.
         """
@@ -560,7 +560,7 @@ class Decoder:
         self.header_table_size = new_size
         return consumed
 
-    def _decode_indexed(self, data: bytes) -> tuple[HeaderTuple, int]:
+    def _decode_indexed(self, data: bytes | memoryview) -> tuple[HeaderTuple, int]:
         """
         Decodes a header represented using the indexed representation.
         """
@@ -569,16 +569,19 @@ class Decoder:
         log.debug("Decoded %s, consumed %d", header, consumed)
         return header, consumed
 
-    def _decode_literal_no_index(self, data: bytes) -> tuple[HeaderTuple, int]:
+    def _decode_literal_no_index(self, data: bytes | memoryview) -> tuple[HeaderTuple, int]:
         return self._decode_literal(data, should_index=False)
 
-    def _decode_literal_index(self, data: bytes) -> tuple[HeaderTuple, int]:
+    def _decode_literal_index(self, data: bytes | memoryview) -> tuple[HeaderTuple, int]:
         return self._decode_literal(data, should_index=True)
 
-    def _decode_literal(self, data: bytes, should_index: bool) -> tuple[HeaderTuple, int]:
+    def _decode_literal(self, data: bytes | memoryview, should_index: bool) -> tuple[HeaderTuple, int]:
         """
         Decodes a header represented with a literal.
         """
+        if isinstance(data, memoryview):
+            data = data.tobytes()  # pragma: no cover
+
         total_consumed = 0
 
         # When should_index is true, if the low six bits of the first byte are
