@@ -9,7 +9,9 @@ build-backend = "setuptools.build_meta"
 name = "hpack"
 description = "Pure-Python HPACK header encoding"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-license = { file = "LICENSE" }
+
+license = "MIT"
+license-files = [ "LICENSE" ]
 
 authors = [
   { name = "Cory Benfield", email = "cory@lukasa.co.uk" }
@@ -26,7 +28,6 @@ dynamic = ["version"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3",
