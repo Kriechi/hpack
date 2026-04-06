@@ -12,12 +12,12 @@ dev
 **API Changes (Backward Compatible)**
 
 - Support for Python 3.14 has been added.
-- Support for PyPy 3.11 has been added.
 
 **Bugfixes**
 
 - Headers marked as `sensitive` will no longer log their value at DEBUG level. Instead a placeholder value of `SENSITIVE_REDACTED` is logged.
 - Fixed perfect match missed for headers with empty values.
+
 
 4.1.0 (2025-01-22)
 ------------------
